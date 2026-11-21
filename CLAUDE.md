@@ -24,5 +24,5 @@ There is no test framework configured.
   - Transactions are held in local `useState`, seeded with hardcoded sample data; nothing is persisted (state resets on reload).
   - Each transaction: `{ id, description, amount, type: "income" | "expense", category, date: "YYYY-MM-DD" }`.
   - Income/expense totals and balance are derived on every render via `filter` + `reduce`; the list is filtered by type and category selects.
-  - `amount` is stored as a **string** (both in seed data and from the form input), so numeric aggregation must convert it explicitly.
+  - `amount` is stored as a **number**; the form input yields a string, so it is converted with `Number()` when a transaction is created.
 - ESLint enforces react-hooks and react-refresh rules; `no-unused-vars` ignores identifiers starting with an uppercase letter or `_`.
