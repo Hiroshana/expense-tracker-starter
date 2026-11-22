@@ -3,6 +3,7 @@ import './App.css'
 import Summary from './components/Summary'
 import TransactionForm from './components/TransactionForm'
 import TransactionList from './components/TransactionList'
+import SpendingChart from './components/SpendingChart'
 
 const categories = ["food", "housing", "utilities", "transport", "entertainment", "salary", "other"];
 
@@ -32,6 +33,7 @@ function App() {
       <p className="subtitle">Track your income and expenses</p>
 
       <Summary transactions={transactions} />
+      <SpendingChart transactions={transactions} />
       <TransactionForm categories={categories} onAdd={handleAdd} />
       <TransactionList transactions={transactions} categories={categories} onDelete={handleDelete} />
     </div>
