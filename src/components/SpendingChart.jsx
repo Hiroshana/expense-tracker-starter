@@ -1,6 +1,9 @@
 import { ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip, CartesianGrid, LabelList } from 'recharts';
+import { capitalize, formatMoney } from '../format';
 
-const formatCurrency = (value) => `$${value.toLocaleString()}`;
+const INK_MUTED = "#5D6683";
+const LINE = "#DCE1EB";
+const EXPENSE = "#B3323E";
 
 function SpendingChart({ transactions }) {
   const totals = transactions
@@ -11,44 +14,48 @@ function SpendingChart({ transactions }) {
     }, {});
 
   const data = Object.entries(totals)
-    .map(([category, amount]) => ({ category, amount }))
+    .map(([category, amount]) => ({ category: capitalize(category), amount }))
     .sort((a, b) => b.amount - a.amount);
 
   return (
-    <div className="spending-chart">
-      <h2>Spending by Category</h2>
+    <section className="spending-chart" aria-labelledby="chart-title">
+      <h2 id="chart-title">Spending by category</h2>
       {data.length === 0 ? (
-        <p className="empty">No expenses yet.</p>
+        <p className="empty">Nothing spent yet. Expenses you add will show up here.</p>
       ) : (
-        <ResponsiveContainer width="100%" height={300}>
+        <ResponsiveContainer width="100%" height={280}>
           <BarChart
             data={data}
-            margin={{ top: 24, right: 8, left: 8, bottom: 0 }}
+            margin={{ top: 24, right: 0, left: 0, bottom: 0 }}
             title="Spending by category"
           >
-            <CartesianGrid vertical={false} stroke="#eee" />
+            <CartesianGrid vertical={false} stroke={LINE} />
             <XAxis
               dataKey="category"
               tickLine={false}
-              axisLine={false}
+              axisLine={{ stroke: LINE }}
               interval={0}
-              tick={{ fill: "#555", fontSize: 13 }}
+              tick={{ fill: INK_MUTED, fontSize: 12 }}
             />
             <YAxis
-              tickFormatter={formatCurrency}
+              tickFormatter={formatMoney}
               tickLine={false}
               axisLine={false}
-              width={60}
-              tick={{ fill: "#555", fontSize: 12 }}
+              width={56}
+              tick={{ fill: INK_MUTED, fontSize: 12 }}
             />
-            <Tooltip formatter={(value) => [formatCurrency(value), "Spent"]} cursor={{ fill: "#f5f5f5" }} />
-            <Bar dataKey="amount" fill="#e05252" radius={[4, 4, 0, 0]} maxBarSize={48}>
-              <LabelList dataKey="amount" position="top" formatter={formatCurrency} fill="#333" fontSize={13} />
+            <Tooltip
+              formatter={(value) => [formatMoney(value), "Spent"]}
+              cursor={{ fill: "rgba(28, 37, 65, 0.05)" }}
+              contentStyle={{ borderRadius: 8, border: `1px solid ${LINE}`, fontSize: 13 }}
+            />
+            <Bar dataKey="amount" fill={EXPENSE} radius={[3, 3, 0, 0]} maxBarSize={44}>
+              <LabelList dataKey="amount" position="top" formatter={formatMoney} fill="#1C2541" fontSize={12} />
             </Bar>
           </BarChart>
         </ResponsiveContainer>
       )}
-    </div>
+    </section>
   );
 }
 
